@@ -1,4 +1,4 @@
-# 🏦 Loan Approval System
+# ระบบ Generative AI ให้คำแนะนำและประเมินความเสี่ยงการอนุมัติสินเชื่อ 
 
 ระบบประเมินสินเชื่อด้วย Generative AI
 
@@ -8,11 +8,24 @@
 
 ```
 loan-approval/
-├── backend/
-│   ├── main.py           ← FastAPI backend (จุดแก้ไขมาร์คไว้ทั้งหมด)
-│   └── requirements.txt
-└── frontend/
-    └── index.html        ← UI ทั้งหมดในไฟล์เดียว
+├── app/
+│   ├── core
+|   |     ├── __init__.py
+|   |     ├── config.py
+|   |     └── static.py
+│   ├── endpoint
+|   |     └── summary.py  <-- API backend 
+│   ├── schemas
+|   |     └── __init__.py 
+│   ├── schemas
+|   |     ├── data.py
+|   |     └── model.py    
+│   └── main.py 
+├── frontend/ 
+│   └── index.html       <-- Frontend 
+├── application.py
+├── requirements.txt
+└── test_case.py
 ```
 
 ---

@@ -144,9 +144,9 @@ test_cases = [
         "monthly_income": 21000,
         "monthly_debt": 10000,
         "requested_loan_amount": 80000,
-        "credit_history": "normal",
-        "duration": 12,
-        "collateral": "car",
+        "credit_history": "none",
+        "duration": 24,
+        "collateral": "none",
         "documents": ["id_card", "salary_slip", "bank_statement"],
         "notes": ""
     },

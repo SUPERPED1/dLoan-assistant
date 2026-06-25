@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from pathlib import Path
 from app.endpoint import summary
 # =============================================================
 # [EDIT: APP_CONFIG] — ตั้งค่าแอปพลิเคชัน
@@ -28,3 +30,9 @@ app.add_middleware(
 )
 
 app.include_router(summary.router)
+
+@app.get("/")
+async def root():
+    return FileResponse(
+        Path(__file__).parent.parent / "frontend" / "index.html"
+    )

@@ -1,5 +1,4 @@
 from app.core import *
-import math
 
 # //////////////////// Calculate //////////////////
 def calculate_dpi(income, debt, monthly = 0):
