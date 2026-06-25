@@ -32,81 +32,72 @@ loan-approval/
 
 ## 🚀 วิธีติดตั้งและรัน
 
-### 1. Backend (FastAPI)
+### 1. ดาวน์โหลดไฟล์ ZIP ของโปรเจกต์
 
+1. เปิดหน้า GitHub Repository
+2. คลิกปุ่ม **`<> Code`**
+
+<p align="center">
+  <img src="Instruction_image/zip1.png" width="800" alt="Code Button">
+</p>
+
+3. คลิก **Download ZIP**
+
+<p align="center">
+  <img src="Instruction_image/zip2.png" width="800" alt="Download ZIP">
+</p>
+
+4. เลือกตำแหน่งที่ต้องการจัดเก็บไฟล์
+5. แตกไฟล์ ZIP ก่อนดำเนินการในขั้นตอนถัดไป
+
+### 2. ติดตั้ง Python (ในกรณีที่ยังไม่เคยติดตั้ง Python มาก่อน)
+โดยสามารถติดตั้ง Python เวอร์ชั่น 3.13.14 ได้บนเว็บไซต์
 ```bash
-cd backend
+https://www.python.org/downloads/windows/
+```
 
-# ติดตั้ง dependencies
+### 3. ติดตั้ง Package Python
+1. เปิด Terminal ด้วยคีย์ลัด Win + R
+2. พิมพ์ cmd แล้วกด Enter
+3. ใช้คำสั่ง cd ไปยังโฟลเดอร์ที่แตกไฟล์มาก่อนหน้า
+```bash
+cd /path/to/folder
+```
+4. จากนั้นใส่คำสั่ง (เมื่อเสร็จขั้นตอนนี้อย่าพึ่งปิด Terminal)
+```bash
 pip install -r requirements.txt
-
-# ตั้งค่า API Key
-export ANTHROPIC_API_KEY="sk-ant-..."
-
-# รัน server
-python main.py
-# หรือ
-uvicorn main:app --reload --port 8000
 ```
 
-API จะรันที่ `http://localhost:8000`
-Swagger docs: `http://localhost:8000/docs`
-
-### 2. Frontend
-
-เปิดไฟล์ `frontend/index.html` ด้วย browser โดยตรง
-หรือใช้ VS Code Live Server (port 5500)
-
----
-
-## 🔧 จุดที่แก้ไขได้ (Edit Points)
-
-ไฟล์ทั้งสองมีการมาร์คจุดแก้ไขในรูปแบบ:
+### 4. เริ่มต้นใช้งาน
+1. เปิดไฟล์ที่ชื่อว่า .env.example ขึ้น
+2. จะพบ
 ```
-# [EDIT: ชื่อจุด] — คำอธิบาย
-...โค้ดที่แก้ไขได้...
-# [/EDIT]
+TYPHOON_API_KEY = replace with you typhoon api key
 ```
+3. ให้ทำการเปลี่ยนเป็น API key ของคุณโดยสามารถรับได้จากเว็บไซต์
+```
+https://playground.opentyphoon.ai/auth/sign-in
+```
+4. ให้ล็อคอินตามขั้นตอนของเว็บไซต์
+5. เมื่อล็อคอินสำเร็จแล้วที่มุมขวาบนจะพบปุ่ม "API key"
+<p align="center">
+  <img src="Instruction_image/api1.png" width="800" alt="Code Button">
+</p>
 
-### main.py — จุดสำคัญ
+6. ให้ copy API key ที่ได้รับมาใส่ในไฟล์ .env.example
+<p align="center">
+  <img src="Instruction_image/api2.png" width="800" alt="Code Button">
+</p>
 
-| จุด | คำอธิบาย |
-|-----|---------|
-| `ELIGIBILITY_RULES` | กฎเกณฑ์คุณสมบัติ (อายุ, รายได้, DTI) |
-| `HIGH_RISK_THRESHOLDS` | เกณฑ์ความเสี่ยงสูง |
-| `INTEREST_RATE` | อัตราดอกเบี้ย |
-| `CREDIT_HISTORY_SCORE` | คะแนนตามประวัติเครดิต |
-| `DTI_SCORE` | คะแนนตาม DTI |
-| `SYSTEM_PROMPT` | บทบาทของ AI |
-| `USER_PROMPT` | รูปแบบข้อมูลที่ส่ง AI |
-| `FINAL_RECOMMENDATION_LOGIC` | ตรรกะสรุปผล |
-| `SAVE_TO_DB` | บันทึก Audit Log |
-| `ANTHROPIC_CONFIG` | API Key และ Model |
-| `CORS_ORIGINS` | Domain ที่อนุญาต |
-
-### index.html — จุดสำคัญ
-
-| จุด | คำอธิบาย |
-|-----|---------|
-| `CSS_VARIABLES` | สีและ theme |
-| `API_BASE_URL` | URL ของ Backend |
-| `EMPLOYMENT_OPTIONS` | ตัวเลือกอาชีพ |
-| `DOCUMENT_TYPES` | ประเภทเอกสาร |
-| `STATUS_MAP` | แมป recommendation → สี/ไอคอน |
-| `RISK_SCORE_COLORS` | สี Risk Score Bar |
-| `DTI_COLOR_THRESHOLDS` | สีของ DTI preview |
-| `TOAST_DURATION` | ระยะเวลาแสดง notification |
-
----
-
-## 🔄 API Endpoints
-
-| Method | Path | คำอธิบาย |
-|--------|------|---------|
-| POST | `/evaluate` | ประเมินคำขอสินเชื่อ |
-| POST | `/audit/log` | บันทึกการตัดสินใจ |
-| GET  | `/health` | ตรวจสอบสถานะ |
-| GET  | `/docs` | Swagger UI |
+7. จากนั้นให้ทำการเปลี่ยนชื่อไฟล์ .env.example เป็น .env
+8. เมื่อขั้นตอนนี้เสร็จสิ้นให้กลับไปยัง Terminal แล้วพิมพ์คำสั่ง
+```bash
+python application.py
+```
+9. จากนั้นให้เปิด Browser แล้วใส่ URL นี้เป็นอันเสร็จสิ้นพร้อมใช้งาน
+```
+http://localhost:8000/
+```
 
 ---
 
