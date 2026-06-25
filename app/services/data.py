@@ -1,0 +1,110 @@
+from app.core import *
+import math
+
+# //////////////////// Calculate //////////////////
+def calculate_dpi(income, debt, monthly = 0):
+    dpi = int(((debt + monthly)/income) * 100)
+    return dpi
+
+def calculate_pmt(principal, interest, duration):
+    r = (interest/100) / 12
+    
+    pmt = int((principal * r)*((1 + r)**duration) / (((1 + r)**duration) - 1))
+    return pmt
+
+def calculate_age(age, duration):
+    f_age = int(age + (duration/12))
+    return f_age
+    
+# //////////////// Process ///////////////////
+async def check_missing_data(payload):
+    required_fields = [
+        "applicant_id",
+        "name",
+        "age",
+        "employment_type",
+        "monthly_income",
+        "monthly_debt",
+        "requested_loan_amount",
+        "credit_history",
+        "duration",
+    ]
+    required_docs_employee = ["id_card", "salary_slip", "bank_statement"]
+    required_docs_freelance, at_least_docs_freelance = ["id_card", "bank_statement"], {"withholding_tax_certificate", "tax_filing_report", "employment_contract"}
+    required_docs_business, at_least_docs_business = ["id_card", "bank_statement", "commercial_registration_certificate"], {"p_p_30", "business_premises_photographs"}
+    
+    missing_field = [
+        key for key in required_fields
+        if (
+            payload.get(key) is None
+            or (isinstance(payload.get(key), str) and payload.get(key).strip() == "")
+            or (isinstance(payload.get(key), (int, float)) and payload.get(key) < 0)
+            or (isinstance(payload.get(key), list) and len(payload.get(key)) == 0)
+        )
+    ]
+    
+    if payload.get("employment_type"):
+        employment_type = payload.get("employment_type")
+        if employment_type == "employee":
+            missing_doc = [doc for doc in required_docs_employee if doc not in payload["documents"]]
+        elif employment_type == "freelance":
+            missing_doc = [doc for doc in required_docs_freelance if doc not in payload["documents"]]
+            if not (set(payload["documents"]) & at_least_docs_freelance):
+                missing_doc.append(list(at_least_docs_freelance))
+                
+        elif employment_type == "business_owner":
+            missing_doc = [doc for doc in required_docs_business if doc not in payload["documents"]]
+            if not (set(payload["documents"]) & at_least_docs_business):
+                missing_doc.append(list(at_least_docs_business))
+        else:
+            missing_doc = []
+    else:
+        missing_doc = []
+    
+    return missing_field, missing_doc
+
+async def check_eligible_rule(payload, cal_data):
+    Not_pass = []
+    
+    if payload["age"] < MINIMUM_AGE:
+        Not_pass.append("ผู้ยื่นคำร้องมีอายุไม่ถึงเกณฑ์ 21 ปี")
+    elif payload["age"] > MAXIMUM_AGE:
+        Not_pass.append("ผู้ยื่นคำร้องมีอายุมากกว่าเกณฑ์ 60 ปี")
+        
+    if payload["employment_type"] not in ACCEPTED_EMPLOYMENT_TYPE:
+        Not_pass.append("ผู้ยื่นคำร้องมีอาชีพที่ไม่อยู่ในเกณฑ์การคัดกรอง")
+        
+    if payload["monthly_income"] < MINIMUM_INCOME:
+        Not_pass.append(f"ผู้ยื่นคำร้องมีเงินเดือนไม่ถึงเกณฑ์กำหนดขั้นต่ำ {MINIMUM_INCOME:,d} บาท")
+        
+    if payload["monthly_income"] != 0:
+        future_net_income = payload["monthly_income"] - (payload["monthly_debt"] + cal_data["monthly_payment"])
+        if cal_data["debt_to_income_ratio"] > MINIMUM_DTI:
+            Not_pass.append(f"ผู้ยื่นคำร้องมีสัดส่วนหนี้สินต่อรายได้สูงกว่าเกณฑ์ {MINIMUM_DTI}%")
+        elif future_net_income < MINIMUM_INCOME and cal_data["future_debt_to_income_ratio"] > MINIMUM_FUTURE_DTI:
+            Not_pass.append(f"ผู้ยื่นคำร้องมีสัดส่วนหนี้สินต่อรายได้หากมีการผ่อนสินเชื่อสูงเกินกว่าเกณฑ์ 70% และมีหลายได้คงเหลือหลังหักค่าใช้จ่ายต่ำกว่า {MINIMUM_INCOME:,d} บาท")
+            
+    if payload["credit_history"] == "default":
+        Not_pass.append("ผู้ยื่นคำร้องเคยมีประวัติค้างชำระ")
+        
+    return Not_pass
+
+
+async def prepare_data(payload):
+    format = {
+        "debt_to_income_ratio" : 0,
+        "monthly_payment" : 0,
+        "future_debt_to_income_ratio": 0,
+        "age_finish": 0
+    }
+    
+    format["debt_to_income_ratio"] = calculate_dpi(payload["monthly_income"], payload["monthly_debt"])
+    
+    format["monthly_payment"] = calculate_pmt(payload["requested_loan_amount"], STATIC_INTEREST, payload["duration"])
+    
+    format["future_debt_to_income_ratio"] = calculate_dpi(payload["monthly_income"], payload["monthly_debt"], format["monthly_payment"])
+    
+    format["age_finish"] = calculate_age(payload["age"], payload["duration"])
+    
+    return format
+    

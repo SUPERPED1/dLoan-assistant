@@ -1,0 +1,10 @@
+MINIMUM_AGE = 21 # year
+MAXIMUM_AGE = 60 # year
+
+MINIMUM_INCOME = 20000 # BATH
+MINIMUM_DTI = 60 # %
+MINIMUM_FUTURE_DTI = 70
+
+ACCEPTED_EMPLOYMENT_TYPE = ["employee", "freelance", "business_owner"]
+
+STATIC_INTEREST = 8

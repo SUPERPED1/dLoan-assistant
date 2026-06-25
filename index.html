@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>dLoan Service</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: #fdf6f0;
+      color: #5a4a42;
+    }
+
+    /* HEADER */
+    .topheader {
+      background: #ffffff;
+      border-bottom: 1px solid #f0e4da;
+      padding: 0 24px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #5a4a42;
+    }
+
+    .brand-icon {
+      width: 30px;
+      height: 30px;
+      background: #1D9E75;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 17px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-pill {
+      font-size: 12px;
+      background: #E1F5EE;
+      color: #085041;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+
+    .avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #CECBF6;
+      color: #3C3489;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* LAYOUT */
+    .container {
+      display: flex;
+      height: calc(100vh - 52px);
+    }
+
+    /* LEFT PANEL */
+    .left {
+      width: 28%;
+      min-width: 260px;
+      padding: 24px;
+      background: #fffaf5;
+      border-right: 1px solid #f0e4da;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-title {
+      margin-bottom: 12px;
+      color: #a67c6b;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    textarea {
+      flex: 1;
+      max-height: 420px;
+      border-radius: 12px;
+      border: 1px solid #e8dcd2;
+      padding: 14px;
+      font-size: 13px;
+      background: #fffdfb;
+      resize: none;
+      outline: none;
+      color: #5a4a42;
+      font-family: "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+
+    textarea:focus {
+      border-color: #d8b4a0;
+    }
+
+    .buttons {
+      margin-top: 13px;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    button {
+      border: none;
+      padding: 9px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 13px;
+      transition: background 0.15s;
+    }
+
+    .submit {
+      background: #f4c7b8;
+      color: #5a3e36;
+    }
+
+    .submit:hover {
+      background: #f1b8a5;
+    }
+
+    .submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .reset {
+      background: #e7d4c8;
+      color: #5a4a42;
+    }
+
+    .reset:hover {
+      background: #dcc3b5;
+    }
+
+    .error {
+      color: #c65d5d;
+      margin-top: 9px;
+      font-size: 12px;
+      min-height: 18px;
+    }
+
+    /* RIGHT PANEL */
+    .right {
+      flex: 1;
+      padding: 24px;
+      background: #fdf3ec;
+      overflow-y: auto;
+    }
+
+    .right-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .cards-count {
+      font-size: 12px;
+      color: #a67c6b;
+      background: #f5e4d8;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    /* CARDS GRID */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .loan-card {
+      background: #ffffff;
+      border: 1px solid #f0e4da;
+      border-radius: 14px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: border-color 0.15s, transform 0.1s, box-shadow 0.15s;
+    }
+
+    .loan-card:hover {
+      border-color: #d8b4a0;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(90, 74, 66, 0.08);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .app-id {
+      font-size: 11px;
+      color: #a67c6b;
+      font-weight: 500;
+    }
+
+    .status-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .badge-reject {
+      background: #FCEBEB;
+      color: #A32D2D;
+    }
+
+    .badge-risk {
+      background: #FAEEDA;
+      color: #854F0B;
+    }
+
+    .badge-info {
+      background: #E6F1FB;
+      color: #185FA5;
+    }
+
+    .badge-approve {
+      background: #E1F5EE;
+      color: #0F6E56;
+    }
+
+    .card-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #3a2e28;
+      margin-bottom: 3px;
+    }
+
+    .card-loan {
+      font-size: 12px;
+      color: #a67c6b;
+      margin-bottom: 10px;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: #b89585;
+      border-top: 1px solid #f5ece6;
+      padding-top: 9px;
+    }
+
+    .view-detail {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: #c0825e;
+      font-weight: 500;
+    }
+
+    /* FILTER BAR */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 16px;
+    }
+
+    .filter-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s;
+      background: #ffffff;
+      color: #a67c6b;
+      border-color: #f0e4da;
+    }
+
+    .filter-btn:hover {
+      border-color: #d8b4a0;
+      color: #7a5040;
+    }
+
+    .filter-btn .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .filter-btn .count-bubble {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 20px;
+      margin-left: 2px;
+    }
+
+    /* active states per category */
+    .filter-btn.active-all {
+      background: #5a4a42;
+      color: #fff;
+      border-color: #5a4a42;
+    }
+
+    .filter-btn.active-reject {
+      background: #FCEBEB;
+      color: #791F1F;
+      border-color: #F7C1C1;
+    }
+
+    .filter-btn.active-risk {
+      background: #FAEEDA;
+      color: #633806;
+      border-color: #FAC775;
+    }
+
+    .filter-btn.active-info {
+      background: #E6F1FB;
+      color: #0C447C;
+      border-color: #B5D4F4;
+    }
+
+    .filter-btn.active-approve {
+      background: #E1F5EE;
+      color: #085041;
+      border-color: #9FE1CB;
+    }
+
+    .dot-all {
+      background: #a67c6b;
+    }
+
+    .dot-reject {
+      background: #E24B4A;
+    }
+
+    .dot-risk {
+      background: #EF9F27;
+    }
+
+    .dot-info {
+      background: #378ADD;
+    }
+
+    .dot-approve {
+      background: #1D9E75;
+    }
+
+    .count-all {
+      background: #e7d4c8;
+      color: #7a5040;
+    }
+
+    .count-reject {
+      background: #F7C1C1;
+      color: #791F1F;
+    }
+
+    .count-risk {
+      background: #FAC775;
+      color: #633806;
+    }
+
+    .count-info {
+      background: #B5D4F4;
+      color: #0C447C;
+    }
+
+    .count-approve {
+      background: #9FE1CB;
+      color: #085041;
+    }
+
+    .filter-btn.active-all .count-bubble {
+      background: rgba(255, 255, 255, 0.25);
+      color: #fff;
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #b89585;
+    }
+
+    .empty-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+
+    .empty-text {
+      font-size: 14px;
+    }
+
+    /* ── MODAL OVERLAY ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(60, 40, 30, 0.38);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: #ffffff;
+      border-radius: 18px;
+      border: 1px solid #f0e4da;
+      width: 100%;
+      max-width: 900px;
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid #f0e4da;
+      background: #fffaf5;
+      flex-shrink: 0;
+    }
+
+    .modal-header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .modal-name {
+      font-size: 17px;
+      font-weight: 600;
+      color: #3a2e28;
+    }
+
+    .modal-sub {
+      font-size: 12px;
+      color: #a67c6b;
+    }
+
+    .modal-close {
+      background: #f5ece6;
+      border: none;
+      cursor: pointer;
+      color: #a67c6b;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+
+    .modal-close:hover {
+      background: #ead4c4;
+      color: #5a3e36;
+    }
+
+    /* Two-column modal layout */
+    .modal-body {
+      overflow-y: auto;
+      padding: 0;
+      display: flex;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .modal-left-col {
+      flex: 1;
+      padding: 18px 20px 24px;
+      overflow-y: auto;
+      min-width: 0;
+    }
+
+    .modal-right-col {
+      width: 260px;
+      flex-shrink: 0;
+      padding: 18px 20px 24px;
+      background: #fffaf5;
+      border-left: 1px solid #f0e4da;
+      overflow-y: auto;
+    }
+
+    .explanation-box {
+      font-size: 13px;
+      color: #5a4a42;
+      line-height: 1.75;
+      background: #ffffff;
+      border: 1px solid #f0e4da;
+      border-left: 3px solid #f4c7b8;
+      border-radius: 0 9px 9px 0;
+      padding: 14px 16px;
+      flex: 1;
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #c0825e;
+      margin: 16px 0 8px;
+    }
+
+    .section-label:first-child {
+      margin-top: 0;
+    }
+
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .info-table tr {
+      border-bottom: 1px solid #f5ece6;
+    }
+
+    .info-table tr:last-child {
+      border-bottom: none;
+    }
+
+    .info-table td {
+      padding: 6px 2px;
+      font-size: 13px;
+    }
+
+    .info-table td:first-child {
+      color: #a67c6b;
+      width: 45%;
+    }
+
+    .info-table td:last-child {
+      color: #3a2e28;
+      font-weight: 500;
+      text-align: right;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 20px;
+      background: #f5ece6;
+      color: #7a5a4e;
+      border: 1px solid #f0e4da;
+    }
+
+    .alert-item {
+      font-size: 13px;
+      padding: 7px 11px;
+      border-radius: 9px;
+      margin-bottom: 6px;
+      line-height: 1.5;
+    }
+
+    .alert-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .alert-reject {
+      background: #FCEBEB;
+      color: #791F1F;
+    }
+
+    .alert-risk {
+      background: #FAEEDA;
+      color: #633806;
+    }
+
+    .alert-info {
+      background: #E6F1FB;
+      color: #0C447C;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .metric-card {
+      background: #fdf6f0;
+      border: 1px solid #f0e4da;
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+
+    .metric-val {
+      font-size: 20px;
+      font-weight: 600;
+      color: #3a2e28;
+    }
+
+    .metric-lbl {
+      font-size: 11px;
+      color: #a67c6b;
+      margin-top: 2px;
+    }
+
+    /* LOADING OVERLAY */
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(90, 74, 66, 0.35);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(3px);
+    }
+
+    .loading-overlay.open {
+      display: flex;
+    }
+
+    .loading-box {
+      background: #ffffff;
+      border-radius: 18px;
+      border: 1px solid #f0e4da;
+      padding: 36px 44px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 12px 40px rgba(90, 74, 66, 0.15);
+    }
+
+    .loading-ring {
+      width: 52px;
+      height: 52px;
+      border: 4px solid #f5ece6;
+      border-top-color: #1D9E75;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    .loading-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #3a2e28;
+    }
+
+    .loading-sub {
+      font-size: 13px;
+      color: #a67c6b;
+      margin-top: -8px;
+    }
+
+    .loading-dots span {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #d8b4a0;
+      margin: 0 3px;
+      animation: bounce 1.2s infinite ease-in-out;
+    }
+
+    .loading-dots span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .loading-dots span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes bounce {
+
+      0%,
+      80%,
+      100% {
+        transform: scale(0.7);
+        opacity: 0.5;
+      }
+
+      40% {
+        transform: scale(1.1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="topheader">
+    <div class="brand">
+      <div class="brand-icon">🏦</div>
+      dLoan service
+    </div>
+    <div class="header-right">
+      <span class="status-pill">Live</span>
+      <div class="avatar">JD</div>
+    </div>
+  </header>
+
+  <!-- MAIN LAYOUT -->
+  <div class="container">
+
+    <!-- LEFT: JSON INPUT -->
+    <div class="left">
+      <div class="panel-title">📥 JSON Input</div>
+      <textarea id="jsonInput" placeholder='{"applicant_data": { ... }}'></textarea>
+      <div class="buttons">
+        <button class="reset" onclick="resetForm()">Reset</button>
+        <button class="submit" id="submitBtn" onclick="submitData()">Submit</button>
+      </div>
+      <div class="error" id="errorMsg"></div>
+    </div>
+
+    <!-- RIGHT: CARDS -->
+    <div class="right">
+      <div class="right-header">
+        <div class="panel-title" style="margin-bottom:0">📋 Results</div>
+        <span class="cards-count" id="cardsCount">0 records</span>
+      </div>
+      <!-- FILTER BUTTONS -->
+      <div class="filter-bar" id="filterBar">
+        <button class="filter-btn active-all" data-filter="all" onclick="setFilter('all')">
+          <span class="dot dot-all"></span> All
+          <span class="count-bubble count-all" id="cnt-all">0</span>
+        </button>
+        <button class="filter-btn" data-filter="reject" onclick="setFilter('reject')">
+          <span class="dot dot-reject"></span> Rejected
+          <span class="count-bubble count-reject" id="cnt-reject">0</span>
+        </button>
+        <button class="filter-btn" data-filter="risk" onclick="setFilter('risk')">
+          <span class="dot dot-risk"></span> High Risk
+          <span class="count-bubble count-risk" id="cnt-risk">0</span>
+        </button>
+        <button class="filter-btn" data-filter="info" onclick="setFilter('info')">
+          <span class="dot dot-info"></span> Need Info
+          <span class="count-bubble count-info" id="cnt-info">0</span>
+        </button>
+        <button class="filter-btn" data-filter="approve" onclick="setFilter('approve')">
+          <span class="dot dot-approve"></span> Passed
+          <span class="count-bubble count-approve" id="cnt-approve">0</span>
+        </button>
+      </div>
+
+      <div class="cards-grid" id="cardsGrid">
+        <div class="empty-state" style="grid-column:1/-1">
+          <div class="empty-icon">📂</div>
+          <div class="empty-text">Submit a JSON request to see results here</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+    <div class="modal-box" id="modalBox">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <div class="modal-name" id="modalName"></div>
+          <div class="modal-sub" id="modalSub"></div>
+        </div>
+        <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- LOADING OVERLAY -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-box">
+      <div class="loading-ring"></div>
+      <div class="loading-title">Processing request…</div>
+      <div class="loading-sub">Waiting for backend response</div>
+      <div class="loading-dots">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ─── State ───────────────────────────────────────────────
+    const records = [];
+    let activeFilter = 'all';
+
+    // ─── Filter key from status string ───────────────────────
+    function getFilterKey(status) {
+      const s = (status || '').toLowerCase();
+      if (s.includes('reject')) return 'reject';
+      if (s.includes('high risk')) return 'risk';
+      if (s.includes('approve') || s.includes('pass')) return 'approve';
+      return 'info';
+    }
+
+    // ─── Set active filter & re-render ────────────────────────
+    function setFilter(key) {
+      activeFilter = key;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        const k = btn.dataset.filter;
+        btn.className = 'filter-btn' + (k === key ? ' active-' + k : '');
+      });
+      renderCards();
+    }
+
+    // ─── Update count bubbles ─────────────────────────────────
+    function updateCounts() {
+      const counts = { all: records.length, reject: 0, risk: 0, info: 0, approve: 0 };
+      records.forEach(rec => { counts[getFilterKey(rec.response.status)]++; });
+      Object.keys(counts).forEach(k => {
+        const el = document.getElementById('cnt-' + k);
+        if (el) el.textContent = counts[k];
+      });
+    }
+
+    // ─── Helpers ─────────────────────────────────────────────
+    function fmtMoney(n) {
+      return '฿' + Number(n).toLocaleString();
+    }
+
+    function getBadgeClass(status) {
+      const s = (status || '').toLowerCase();
+      if (s.includes('reject')) return 'badge-reject';
+      if (s.includes('high risk')) return 'badge-risk';
+      if (s.includes('approve') || s.includes('pass')) return 'badge-approve';
+      return 'badge-info';
+    }
+
+    function getShortStatus(status) {
+      const s = (status || '').toLowerCase();
+      if (s.includes('reject')) return 'Rejected';
+      if (s.includes('high risk')) return 'High Risk';
+      if (s.includes('approve') || s.includes('pass')) return 'Passed';
+      if (s.includes('need')) return 'Need Info';
+      return status;
+    }
+
+    // ─── Form actions ─────────────────────────────────────────
+    function resetForm() {
+      document.getElementById('jsonInput').value = '';
+      document.getElementById('errorMsg').innerText = '';
+    }
+
+    async function submitData() {
+      const input = document.getElementById('jsonInput').value.trim();
+      const errorDiv = document.getElementById('errorMsg');
+      const btn = document.getElementById('submitBtn');
+      errorDiv.innerText = '';
+
+      if (!input) {
+        errorDiv.innerText = '❌ Please enter a JSON object';
+        return;
+      }
+
+      let parsed;
+      try {
+        parsed = JSON.parse(input);
+      } catch (err) {
+        errorDiv.innerText = '❌ Invalid JSON format';
+        return;
+      }
+
+      // Show loading overlay
+      btn.disabled = true;
+      document.getElementById('loadingOverlay').classList.add('open');
+
+      try {
+        const response = await callAPI(parsed);
+        addRecord(parsed, response);
+      } catch (err) {
+        errorDiv.innerText = '❌ API error: ' + err.message;
+      } finally {
+        // Hide loading overlay
+        document.getElementById('loadingOverlay').classList.remove('open');
+        btn.disabled = false;
+      }
+    }
+
+    // ─── API call — replace with your real endpoint ───────────
+    async function callAPI(data) {
+      const res = await fetch('http://localhost:8000/summary', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
+    }
+
+    // ─── Add a record & re-render cards ───────────────────────
+    function addRecord(request, response) {
+      records.unshift({ request, response });
+      updateCounts();
+      renderCards();
+    }
+
+    // ─── Render all cards ─────────────────────────────────────
+    function renderCards() {
+      const grid = document.getElementById('cardsGrid');
+      const countEl = document.getElementById('cardsCount');
+
+      const filtered = activeFilter === 'all'
+        ? records
+        : records.filter(rec => getFilterKey(rec.response.status) === activeFilter);
+
+      countEl.textContent = filtered.length + ' record' + (filtered.length !== 1 ? 's' : '');
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1">
+          <div class="empty-icon">${records.length === 0 ? '📂' : '🔍'}</div>
+          <div class="empty-text">${records.length === 0 ? 'Submit a JSON request to see results here' : 'No records match this filter'}</div>
+        </div>`;
+        return;
+      }
+
+      grid.innerHTML = '';
+      filtered.forEach((rec, fi) => {
+        const r = rec.response;
+        const d = r.applicant_data || {};
+        const status = r.status || 'Unknown';
+        const realIndex = records.indexOf(rec);
+
+        const card = document.createElement('div');
+        card.className = 'loan-card';
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-label', 'View details for ' + (d.name || 'applicant'));
+
+        card.innerHTML = `
+          <div class="card-top">
+            <span class="app-id">${d.applicant_id || '—'}</span>
+            <span class="status-badge ${getBadgeClass(status)}">${getShortStatus(status)}</span>
+          </div>
+          <div class="card-name">${d.name || '—'}</div>
+          <div class="card-loan">${d.requested_loan_amount ? fmtMoney(d.requested_loan_amount) : '—'} · ${d.duration ? d.duration + ' mo.' : '—'}</div>
+          <div class="card-footer">
+            <span>Age ${d.age || '—'} · ${(d.employment_type || '').replace(/_/g, ' ')}</span>
+            <span class="view-detail">Details →</span>
+          </div>`;
+
+        card.onclick = () => openModal(realIndex);
+        card.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') openModal(realIndex); };
+        grid.appendChild(card);
+      });
+    }
+
+    // ─── Modal ────────────────────────────────────────────────
+    function openModal(index) {
+      const rec = records[index];
+      const r = rec.response;
+      const d = r.applicant_data || {};
+
+      document.getElementById('modalName').textContent = d.name || '—';
+      document.getElementById('modalSub').textContent =
+        (d.applicant_id || '') + (d.applicant_id && r.status ? '  ·  ' : '') + (r.status || '');
+
+      // ── LEFT column: Financial summary, reasons/risks, explanation
+      let leftHtml = '';
+
+      // Financial metrics
+      if (r.financials) {
+        const f = r.financials;
+        leftHtml += `<div class="section-label">Financial summary</div>
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-val">${fmtMoney(f.monthly_payment)}</div>
+            <div class="metric-lbl">Monthly payment</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-val">${f.debt_to_income_ratio}%</div>
+            <div class="metric-lbl">Current DTI</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-val">${f.future_debt_to_income_ratio}%</div>
+            <div class="metric-lbl">Future DTI</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-val">${f.age_finish}</div>
+            <div class="metric-lbl">Age at payoff</div>
+          </div>
+        </div>`;
+      }
+
+      // Rejection reasons
+      if (r.reason && r.reason.length) {
+        leftHtml += `<div class="section-label">Rejection reasons</div>`;
+        r.reason.forEach(rx => {
+          leftHtml += `<div class="alert-item alert-reject">${rx}</div>`;
+        });
+      }
+
+      // Missing documents
+      const missingDocs = Array.isArray(r.missing_documents)
+        ? r.missing_documents.flat()
+        : [];
+      if (missingDocs.length) {
+        leftHtml += `<div class="section-label">Missing documents</div><div class="tag-row">`;
+        missingDocs.forEach(doc => {
+          leftHtml += `<span class="tag" style="background:#E6F1FB;color:#0C447C;border-color:#B5D4F4">${String(doc).replace(/_/g, ' ')}</span>`;
+        });
+        leftHtml += `</div>`;
+      }
+
+      // Missing fields
+      const missingFields = Array.isArray(r.missing_fields)
+        ? r.missing_fields.flat()
+        : [];
+      if (missingFields.length) {
+        leftHtml += `<div class="section-label">Missing fields</div><div class="tag-row">`;
+        missingFields.forEach(field => {
+          leftHtml += `<span class="tag" style="background:#FAEEDA;color:#854F0B;border-color:#FAC775">${String(field).replace(/_/g, ' ')}</span>`;
+        });
+        leftHtml += `</div>`;
+      }
+
+      // Risk factors
+      if (r.risk && r.risk.length) {
+        leftHtml += `<div class="section-label">Risk factors</div>`;
+        r.risk.forEach(rx => {
+          leftHtml += `<div class="alert-item alert-risk">${rx}</div>`;
+        });
+      }
+
+      // Explanation
+      leftHtml += `<div class="section-label">Explanation</div>
+        <div class="explanation-box">${r.explanation || '<span style="color:#b89585;font-style:italic">No explanation provided.</span>'}</div>`;
+
+      // ── RIGHT column: Applicant info + documents
+      let rightHtml = '';
+
+      rightHtml += `<div class="section-label">Applicant info</div>
+      <table class="info-table">
+        <tr><td>Name</td><td>${d.name || '—'}</td></tr>
+        <tr><td>Age</td><td>${d.age || '—'}</td></tr>
+        <tr><td>Employment</td><td>${(d.employment_type || '').replace(/_/g, ' ')}</td></tr>
+        <tr><td>Monthly income</td><td>${d.monthly_income ? fmtMoney(d.monthly_income) : '—'}</td></tr>
+        <tr><td>Monthly debt</td><td>${d.monthly_debt ? fmtMoney(d.monthly_debt) : '—'}</td></tr>
+        <tr><td>Loan requested</td><td>${d.requested_loan_amount ? fmtMoney(d.requested_loan_amount) : '—'}</td></tr>
+        <tr><td>Duration</td><td>${d.duration ? d.duration + ' months' : '—'}</td></tr>
+        <tr><td>Credit history</td><td>${d.credit_history || '—'}</td></tr>
+        <tr><td>Collateral</td><td>${d.collateral || '—'}</td></tr>
+        <tr><td>Notes</td><td>${d.notes || '—'}</td></tr>
+      </table>`;
+
+      if (d.documents && d.documents.length) {
+        rightHtml += `<div class="section-label">Documents submitted</div><div class="tag-row">`;
+        d.documents.forEach(doc => {
+          rightHtml += `<span class="tag">${doc.replace(/_/g, ' ')}</span>`;
+        });
+        rightHtml += `</div>`;
+      }
+
+      document.getElementById('modalBody').innerHTML = `
+        <div class="modal-left-col">${leftHtml}</div>
+        <div class="modal-right-col">${rightHtml}</div>`;
+
+      document.getElementById('modalOverlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function handleOverlayClick(e) {
+      if (e.target === document.getElementById('modalOverlay')) closeModal();
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
+
+</body>
+
+</html>
