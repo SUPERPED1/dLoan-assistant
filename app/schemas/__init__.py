@@ -22,10 +22,9 @@ class Financials(BaseModel):
     age_finish: Optional[int] = None
 
 
-class Risk(BaseModel):
-    level: Optional[str] = None
-    flags: Optional[List[str]] = None
-
+class RiskScore(BaseModel):
+    total_score: int
+    definition: str
 
 class APIResponse(BaseModel):
     applicant_data: dict
@@ -41,4 +40,4 @@ class APIResponse(BaseModel):
     risk: Optional[List[str]] = None
 
     explanation: Optional[str] = None
-    data: Optional[Dict] = None
+    risk_score: Optional[RiskScore] = None

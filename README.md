@@ -25,7 +25,7 @@ loan-approval/
 │   └── index.html       <-- Frontend 
 ├── application.py
 ├── requirements.txt
-└── test_case.py
+└── test_case.py         <-- Sample applicant dataset 
 ```
 
 ---

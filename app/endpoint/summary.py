@@ -32,8 +32,10 @@ async def analytic(payload:InputFormat):
             financials=cal_data
         )
     
-    # เตรียมข้อมูลให้กับโมเดล
+    # Test
+    risk_score = data.calculate_risk_score(payload, cal_data)
     
+    # เตรียมข้อมูลให้กับโมเดล
     prompt = model.user_prompt_generate(payload, cal_data)
     # Prompt agent role and create test case
     result = await model.typhoon_agent(prompt)
@@ -43,5 +45,6 @@ async def analytic(payload:InputFormat):
         status= result["recommendation"],
         financials=cal_data,
         risk=result["risk_flags"],
-        explanation=result["explanation"]
+        explanation=result["explanation"],
+        risk_score = risk_score
     )

@@ -14,6 +14,100 @@ def calculate_pmt(principal, interest, duration):
 def calculate_age(age, duration):
     f_age = int(age + (duration/12))
     return f_age
+
+def age_score(age):
+    if age <= 25:
+        score = 1
+    elif age <= 35:
+        score = 2
+    elif age <= 50:
+        score = 3
+    elif age <= 60:
+        score = 2
+    else:
+        score = 0
+        
+    return score
+
+def job_score(job):
+    if job == "employee":
+        score = 1
+    else:
+        score = 0
+        
+    return score
+
+def salary_score(salary):
+    if salary <= 35000:
+        score = 1
+    elif salary <= 50000:
+        score = 2
+    else:
+        score = 3
+        
+    return score
+
+def dti_score(dti):
+    if dti <= 20:
+        score = 3
+    elif dti <= 40:
+        score = 2
+    elif dti <= 50:
+        score = 1
+    elif dti <= 60:
+        score = -1
+    else:
+        score = 0
+        
+    return score
+
+def future_dti_score(future_dti):
+    if future_dti <= 20:
+        score = 4
+    elif future_dti <= 30:
+        score = 3
+    elif future_dti <= 40:
+        score = 2
+    elif future_dti <= 50:
+        score = +1
+    elif future_dti <= 60:
+        score = -1
+    elif future_dti <= 70:
+        score = -2
+    elif future_dti > 70:
+        score = -3
+        
+    return score
+
+def credit_history_score(history):
+    if history == "normal":
+        score = 4
+    elif history == "none":
+        score = 2
+    else:
+        score = 0
+    
+    return score
+
+def collateral_score(collateral):
+    if collateral != "" or collateral != "none":
+        score = 2
+    else:
+        score = 0
+    
+    return score
+
+def definition(total_score):
+    if total_score >= 16:
+        text = "ความเสี่ยงต่ำ"
+    elif total_score >= 11:
+        text = "ความเสี่ยงปานกลาง"
+    elif total_score >= 6:
+        text = "ความเสี่ยงสูง"
+    else:
+        text = "ความเสี่ยงสูงมาก"
+    
+    return text
     
 # //////////////// Process ///////////////////
 async def check_missing_data(payload):
@@ -88,6 +182,27 @@ async def check_eligible_rule(payload, cal_data):
         
     return Not_pass
 
+def calculate_risk_score(payload, cal_data):
+    from app.schemas import RiskScore
+
+    # คำนวนคะแนนอายุ
+    age = age_score(payload["age"])
+    job = job_score(payload["employment_type"])
+    salary = salary_score(payload["monthly_income"])
+    dti = dti_score(cal_data["debt_to_income_ratio"])
+    credit_history = credit_history_score(payload["credit_history"])
+    collateral = collateral_score(payload["collateral"])
+    future_dti = future_dti_score(cal_data["future_debt_to_income_ratio"])
+    
+    total_score = age + job + salary + dti + credit_history + collateral + future_dti
+    
+    text = definition(total_score)
+    
+    return RiskScore(
+        total_score= total_score,
+        definition=text
+    )
+    
 
 async def prepare_data(payload):
     format = {
