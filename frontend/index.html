@@ -701,6 +701,117 @@
     }
 
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* CREDIT SCORE INFO BOX */
+    .score-info-box {
+      background: #ffffff;
+      border: 1px solid #e8dcd2;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+    }
+
+    .score-info-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #3a2e28;
+      margin-bottom: 2px;
+    }
+
+    .score-info-subtitle {
+      font-size: 11px;
+      color: #a67c6b;
+      margin-bottom: 12px;
+    }
+
+    .score-info-subtitle strong {
+      color: #c0825e;
+      font-weight: 700;
+    }
+
+    .score-divider {
+      height: 1px;
+      background: #f0e4da;
+      margin: 10px 0;
+    }
+
+    .score-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #c0825e;
+      margin-bottom: 7px;
+    }
+
+    .score-tier-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 0;
+      border-bottom: 1px solid #f9f2ee;
+      font-size: 12px;
+    }
+
+    .score-tier-row:last-child { border-bottom: none; }
+
+    .score-tier-range {
+      font-weight: 600;
+      color: #3a2e28;
+      min-width: 38px;
+      font-size: 12px;
+    }
+
+    .score-tier-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .score-tier-name {
+      flex: 1;
+      padding: 0 8px;
+      font-size: 12px;
+    }
+
+    .score-tier-badge {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+
+    .tier-col-vhigh .score-tier-dot   { background: #E24B4A; }
+    .tier-col-vhigh .score-tier-name  { color: #A32D2D; }
+    .tier-col-vhigh .score-tier-badge { background: #FCEBEB; color: #A32D2D; }
+
+    .tier-col-high .score-tier-dot    { background: #EF9F27; }
+    .tier-col-high .score-tier-name   { color: #854F0B; }
+    .tier-col-high .score-tier-badge  { background: #FAEEDA; color: #854F0B; }
+
+    .tier-col-mid .score-tier-dot     { background: #378ADD; }
+    .tier-col-mid .score-tier-name    { color: #185FA5; }
+    .tier-col-mid .score-tier-badge   { background: #E6F1FB; color: #185FA5; }
+
+    .tier-col-low .score-tier-dot     { background: #1D9E75; }
+    .tier-col-low .score-tier-name    { color: #0F6E56; }
+    .tier-col-low .score-tier-badge   { background: #E1F5EE; color: #0F6E56; }
+
+    .score-factors-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .score-factor {
+      font-size: 11px;
+      color: #7a5a4e;
+      background: #f5ece6;
+      border: 1px solid #ead4c4;
+      border-radius: 5px;
+      padding: 2px 8px;
+    }
   </style>
 </head>
 
@@ -728,6 +839,50 @@
       <div class="ai-warning">
         <span class="ai-warning-icon">⚠️</span>
         <span><strong>dLoan</strong> คือ Generative AI อาจเกิดข้อผิดพลาดได้ โปรดตรวจสอบผลลัพธ์ก่อนนำไปใช้งาน</span>
+      </div>
+
+      <!-- CREDIT ASSESSMENT SCORE INFO BOX -->
+      <div class="score-info-box">
+        <div class="score-info-title">Credit Assessment Score</div>
+        <div class="score-info-subtitle">คะแนนเต็ม <strong>20 คะแนน</strong></div>
+
+        <div class="score-section-label">ระดับความเสี่ยง</div>
+        <div class="score-tier-row tier-col-vhigh">
+          <span class="score-tier-range">0 – 5</span>
+          <span class="score-tier-dot"></span>
+          <span class="score-tier-name">ความเสี่ยงสูงมาก</span>
+          <span class="score-tier-badge">สูงมาก</span>
+        </div>
+        <div class="score-tier-row tier-col-high">
+          <span class="score-tier-range">6 – 10</span>
+          <span class="score-tier-dot"></span>
+          <span class="score-tier-name">ความเสี่ยงสูง</span>
+          <span class="score-tier-badge">สูง</span>
+        </div>
+        <div class="score-tier-row tier-col-mid">
+          <span class="score-tier-range">11 – 15</span>
+          <span class="score-tier-dot"></span>
+          <span class="score-tier-name">ความเสี่ยงปานกลาง</span>
+          <span class="score-tier-badge">ปานกลาง</span>
+        </div>
+        <div class="score-tier-row tier-col-low">
+          <span class="score-tier-range">16 – 20</span>
+          <span class="score-tier-dot"></span>
+          <span class="score-tier-name">ความเสี่ยงต่ำ</span>
+          <span class="score-tier-badge">ต่ำ</span>
+        </div>
+
+        <div class="score-divider"></div>
+
+        <div class="score-section-label">เกณฑ์การคำนวณ</div>
+        <div class="score-factors-wrap">
+          <span class="score-factor">อายุ</span>
+          <span class="score-factor">อาชีพ</span>
+          <span class="score-factor">รายได้</span>
+          <span class="score-factor">ภาระหนี้</span>
+          <span class="score-factor">ประวัติเครดิต</span>
+          <span class="score-factor">หลักประกัน</span>
+        </div>
       </div>
 
       <div class="panel-title">📥 JSON Input</div>
