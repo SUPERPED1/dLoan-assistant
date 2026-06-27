@@ -94,6 +94,28 @@
       flex-direction: column;
     }
 
+    /* AI WARNING BANNER */
+    .ai-warning {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background: #FAEEDA;
+      border: 1px solid #FAC775;
+      border-left: 3px solid #EF9F27;
+      border-radius: 9px;
+      padding: 9px 12px;
+      margin-bottom: 14px;
+      font-size: 12px;
+      color: #633806;
+      line-height: 1.5;
+    }
+
+    .ai-warning-icon {
+      font-size: 14px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
     .panel-title {
       margin-bottom: 12px;
       color: #a67c6b;
@@ -701,6 +723,13 @@
 
     <!-- LEFT: JSON INPUT -->
     <div class="left">
+
+      <!-- AI WARNING BANNER -->
+      <div class="ai-warning">
+        <span class="ai-warning-icon">⚠️</span>
+        <span><strong>dLoan</strong> คือ Generative AI อาจเกิดข้อผิดพลาดได้ โปรดตรวจสอบผลลัพธ์ก่อนนำไปใช้งาน</span>
+      </div>
+
       <div class="panel-title">📥 JSON Input</div>
       <textarea id="jsonInput" placeholder='{"applicant_data": { ... }}'></textarea>
       <div class="buttons">

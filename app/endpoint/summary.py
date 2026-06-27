@@ -1,7 +1,9 @@
 from fastapi import APIRouter, status
 from app.schemas import InputFormat, APIResponse
 from app.services import data, model
+from app.core import get_logger
 
+logger = get_logger(__name__)
 
 router = APIRouter(prefix="/summary")
 
@@ -13,6 +15,7 @@ async def analytic(payload:InputFormat):
     # ตรวจสอบข้อมูลและเอกสารว่าสูญหายหรือไม่
     is_field_missing, is_docs_missing = await data.check_missing_data(payload)
     if is_field_missing or is_docs_missing:
+        logger.info(f"Applicant id [{payload["applicant_id"]}] - Missing document or information on [{is_field_missing}, {is_docs_missing}]")
         return APIResponse(
             applicant_data = payload,
             status = "Need more information",
@@ -25,6 +28,7 @@ async def analytic(payload:InputFormat):
     # ตรวจสอบใบขอสินเชื่อว่าผ่านเกณฑ์ที่กำหนดเบื้องต้นหรือไม่
     reason = await data.check_eligible_rule(payload, cal_data)
     if reason:
+        logger.info(f"Applicant id [{payload["applicant_id"]}] - Not pass the regulator rule in [{reason}]")
         return APIResponse(
             applicant_data = payload,
             status = "Reject/ Not Eligible",
@@ -40,6 +44,13 @@ async def analytic(payload:InputFormat):
     # Prompt agent role and create test case
     result = await model.typhoon_agent(prompt)
     
+    logger.info(
+        "Applicant id [%s] - Analysis completed | Status=%s | RiskScore=%s | RiskFlags=%s",
+        payload["applicant_id"],
+        result["recommendation"],
+        risk_score,
+        result["risk_flags"]
+    )
     return APIResponse(
         applicant_data=payload,
         status= result["recommendation"],
