@@ -61,7 +61,7 @@ https://www.python.org/downloads/windows/
 ---
 ### 3. ติดตั้ง Package Python
 
-1. เปิด Terminal ด้วยคีย์ลัด Win + R
+1. เปิด Terminal ด้วยคีย์ลัด **`Win + R`**
 2. พิมพ์ cmd แล้วกด Enter
 3. ใช้คำสั่ง cd ไปยังโฟลเดอร์ที่แตกไฟล์มาก่อนหน้า
 ```bash
@@ -113,7 +113,7 @@ http://localhost:8000/
   <img src="Instruction_image/web1.png" width="800" alt="Code Button">
 </p>
 
-1. โดยในการเริ่มใช้งานให้นำข้อมูลรูปแบบ JSON ที่เตรียมไว้กรอกเข้าไปยังฟอร์มด้านซ้ายมือ จากนั้นกดปุ่ม submit
+1. โดยในการเริ่มใช้งานให้นำข้อมูลรูปแบบ JSON ที่เตรียมไว้กรอกเข้าไปยังฟอร์มด้านซ้ายมือ จากนั้นกดปุ่ม **`submit`**
 <p align="center">
   <img src="Instruction_image/web2.png" width="800" alt="Code Button">
 </p>

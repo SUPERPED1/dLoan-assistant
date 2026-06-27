@@ -96,7 +96,7 @@ test_cases = [
     # 6. Missing multiple field data
     # ผลลัพท์ที่คาดหวัง: ระบบตอบกลับเป็น Need information โดยบอกข้อมูลสูญหายใน
     # "missing_fields" = ["employment_type", "credit_history"]
-    # "missing_documents" = ["id_card", "salary_slip", "bank_statement"]
+    # "missing_documents" = []
     {
         "applicant_id": "APP006",
         "name": "Preecha",
@@ -174,7 +174,7 @@ test_cases = [
     },
 
     # 10. High dti ไม่มีของคำ้ประกัน
-    # ผลลัพท์ที่คาดหวัง: ระบบตอบกลับเป็น Rejected และให้เหตุผล สัดส่วนหนี้สินต่อรายได้หากมีการผ่อนสินเชื่อสูงเกินกว่าเกณฑ์ 70% และมีหลายได้คงเหลือหลังหักค่าใช้จ่ายต่ำกว่า 20,000 บาท
+    # ผลลัพท์ที่คาดหวัง: ระบบตอบกลับเป็น Rejected และให้เหตุผล สัดส่วนหนี้สินต่อรายได้หากมีการผ่อนสินเชื่อสูงเกินกว่าเกณฑ์ 70% และมีรายได้คงเหลือหลังหักค่าใช้จ่ายต่ำกว่า 20,000 บาท
     {
         "applicant_id": "APP010",
         "name": "Mint",
