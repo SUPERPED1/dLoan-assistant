@@ -1,5 +1,17 @@
 # ระบบ Generative AI ให้คำแนะนำและประเมินความเสี่ยงการอนุมัติสินเชื่อ 
+### ภาพรวม
+โปรเจ็คนี้คิอระบบ Generative AI ที่มีหน้าที่ช่วยตรวจสอบ และ แนะนำการอนุมัติสินเชื่อให้กับเจ้าหน้าที่อนุมัติสินเชื่อ เพื่อลดภาระงาน และ แสดงผลข้อมูลช่วยในการตัดสินใจได้อย่างถูกต้องและมีประสิทธิภาพ
 
+### ฟีเจอร์
+- Generative AI วิเคราะห์ และ ให้คำแนะนำในการอนุมัติสินเชื่อ
+- ระบบตรวจสอบความครบถ้วนของข้อมูล
+- ระบบคัดกรองใบขอสินเชื่อตามเกณฑ์ที่กำหนดไว้เบื้องต้น
+
+### เทคโนโลยี
+- Python 3.13
+- FastAPI
+- HTML / CSS / JavaScript
+- Typhoon API (LLM)
 
 ---
 
@@ -18,7 +30,7 @@ loan-approval/
 |   |     └── __init__.py 
 │   ├── schemas
 |   |     ├── data.py
-|   |     └── model.py    
+|   |     └── model.py   <-- Prompt
 │   └── main.py 
 ├── frontend/ 
 │   └── index.html       <-- Frontend 
@@ -142,3 +154,10 @@ http://localhost:8000/
 | 📋 Need More Info | ข้อมูล/เอกสารไม่ครบ | น้ำเงิน |
 | 🚫 Reject / Not Eligible | ไม่ผ่านเกณฑ์ | แดง |
 | ⚠️ High Risk Review | ผ่านแต่เสี่ยงสูง | ส้ม |
+
+---
+
+# Disclaimer
+This project is developed solely for demonstration and evaluation purposes as part of the dLoan Credit Operation Assignment.
+
+The AI-generated recommendations are intended to assist credit officers and must not be used as the sole basis for approving or rejecting loan applications. Final lending decisions should always be made by authorized personnel following organizational policies and regulatory requirements.
