@@ -1,7 +1,4 @@
 fastapi
 uvicorn
-dotenv
+python-dotenv
 openai
-json
-logging
-datetime
